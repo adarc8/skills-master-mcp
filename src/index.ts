@@ -7,7 +7,7 @@ import express from "express";
 import { AxiosError } from "axios";
 import { exec } from "child_process";
 import { promisify } from "util";
-import { unlink, access } from "fs/promises";
+import { unlink, access, rm, stat } from "fs/promises";
 import { constants } from "fs";
 import { join } from "path";
 import { homedir } from "os";
@@ -364,6 +364,34 @@ Example: source="anthropics/claude-code", skills="frontend-design", agents="clau
         };
         const output =
           execError.stdout || execError.stderr || execError.message;
+
+        // Detect Windows path compatibility issues
+        if (
+          output.includes("invalid path") &&
+          output.includes("unable to checkout working tree")
+        ) {
+          const helpText = `✗ Installation failed: Windows path compatibility issue
+
+${output}
+
+The repository contains paths that are incompatible with Windows (e.g., paths ending with dots or containing reserved characters).
+
+Suggested solutions:
+1. Try installing from the original author's repository instead of an aggregator repo
+2. Extract the skill name from the source path and search for alternative sources
+3. Contact the repository maintainer about Windows compatibility`;
+
+          return {
+            content: [{ type: "text" as const, text: helpText }],
+            structuredContent: {
+              success: false,
+              source: params.source,
+              error: output,
+              errorType: "windows_path_incompatibility",
+            },
+          };
+        }
+
         return {
           content: [
             {
@@ -418,10 +446,10 @@ Parameters:
 - agent: Agent to remove from (default: 'claude-code')
   Valid: claude-code, cursor, codex, opencode, antigravity, github-copilot, roo
 - global: Removal scope [REQUIRED]
-  true = remove from user-level ~/.claude/skills (global install)
-  false = remove from project-level ./.claude/skills (project install)
+  true = remove from user-level ~/.agents/skills (global install)
+  false = remove from project-level ./.agents/skills (project install)
 
-Removes the skill's .md file from the agent's commands/rules directory.`,
+Removes the skill directory and associated symlinks from the agent's skills directory.`,
     inputSchema: RemoveSkillInputSchema,
     annotations: {
       readOnlyHint: false,
@@ -463,12 +491,29 @@ Removes the skill's .md file from the agent's commands/rules directory.`,
       const notFound: string[] = [];
 
       for (const skillName of params.skills) {
-        const filePath = join(baseDir, `${skillName}.md`);
+        // Skills are directories in .agents/skills/, not .md files
+        const skillDir = join(baseDir, skillName);
         try {
-          await access(filePath, constants.F_OK);
-          await unlink(filePath);
-          removed.push(filePath);
-        } catch {
+          // Check if skill directory exists
+          const stats = await stat(skillDir);
+
+          // Remove the skill directory recursively
+          await rm(skillDir, { recursive: true, force: true });
+          removed.push(skillDir);
+
+          // Also remove symlink in .claude/skills/ if it exists (for claude-code)
+          if (params.agent === "claude-code") {
+            const symlinkPath = params.global
+              ? join(homedir(), ".claude", "skills", skillName)
+              : join(process.cwd(), ".claude", "skills", skillName);
+            try {
+              await rm(symlinkPath, { force: true });
+            } catch {
+              // Symlink might not exist, that's OK
+            }
+          }
+        } catch (error) {
+          // Skill directory doesn't exist
           notFound.push(skillName);
         }
       }
