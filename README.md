@@ -32,8 +32,9 @@ The key idea is to help lazy people like me to use skills more often, and save t
 
 ## Example
 
-Here's a real use case. You need to convert a markdown file to PDF but its waste of time and tokens for the agent to learn it with web search. 
-Instead, just import the skill:
+Here’s a real use case: converting a Markdown file to PDF.  
+You can either have the agent learn how to do it via web search, or simply import the skill.  
+Super efficient and fast.
 
 ```
 You:      "I need to convert README.md to a PDF"
