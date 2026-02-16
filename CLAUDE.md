@@ -78,6 +78,13 @@ Skills install to different directories per agent:
 - **Claude Code**: `.claude/skills/` (project) or `~/.claude/skills/` (global)
 - **Cursor**: `.cursor/rules/` (project) or `~/.cursor/rules/` (global)
 
+**Installation Scope (REQUIRED):**
+Both `install_skill` and `remove_skill` tools now require the `global` parameter to be explicitly set:
+- `global: false` → Project-level: `./.claude/skills/` (only available in current project)
+- `global: true` → User-level: `~/.claude/skills/` (available across all projects)
+
+This forces Claude to prompt the user for their preference rather than defaulting to project-level installation.
+
 The `install_skill` tool delegates to `npx add-skill`, which handles installation. The `remove_skill` tool deletes files directly from these paths.
 
 ### Backend URL Override
