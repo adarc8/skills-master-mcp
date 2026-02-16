@@ -437,7 +437,7 @@ export function buildInstallCommand(params: {
   agents: string[];
   global: boolean;
 }): string {
-  let cmd = `npx add-skill "${params.source}"`;
+  let cmd = `npx skills add "${params.source}"`;
   cmd += ` -s ${params.skills.map((s) => `"${s}"`).join(" ")}`;
   cmd += ` -a ${params.agents.join(" ")}`;
   cmd += " -y";

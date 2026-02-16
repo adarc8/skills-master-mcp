@@ -214,7 +214,7 @@ Nothing to configure. Optional env vars for advanced use:
 
 - [SkillsMP Marketplace](https://skillsmp.com)
 - [npm Package](https://www.npmjs.com/package/skills-master-mcp)
-- [add-skill CLI](https://www.npmjs.com/package/add-skill)
+- [skills CLI](https://www.npmjs.com/package/skills)
 - [MCP Specification](https://modelcontextprotocol.io)
 
 ---
