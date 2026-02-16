@@ -395,8 +395,8 @@ const AGENT_SKILL_PATHS: Record<
   { project: (cwd: string) => string; global: () => string }
 > = {
   "claude-code": {
-    project: (cwd: string) => join(cwd, ".claude", "commands"),
-    global: () => join(homedir(), ".claude", "commands"),
+    project: (cwd: string) => join(cwd, ".claude", "skills"),
+    global: () => join(homedir(), ".claude", "skills"),
   },
   cursor: {
     project: (cwd: string) => join(cwd, ".cursor", "rules"),

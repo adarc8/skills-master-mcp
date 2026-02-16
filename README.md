@@ -63,7 +63,7 @@ If you want a skill permanently, you can install it too:
 You:      "Install that markdown-to-pdf skill for Claude Code"
 
 Agent:    runs install_skill
-          → skill is now saved to .claude/commands/
+          → skill is now saved to .claude/skills/
           → available in every future conversation
 ```
 
@@ -114,8 +114,8 @@ npx skills-master-mcp
 | `search` | keywords (e.g., `"react testing"`) | List of matching skills with name, author, stars, links |
 | `ai_search` | plain English (e.g., `"how to build REST APIs"`) | Semantically relevant skills ranked by relevance |
 | `read_skill` | GitHub owner + repo + path | The skill's full SKILL.md content, loaded into agent context |
-| `install_skill` | GitHub source + skill names + target agents | Skill permanently saved to agent's commands directory |
-| `remove_skill` | skill names | Deletes the skill files from agent's commands directory |
+| `install_skill` | GitHub source + skill names + target agents | Skill permanently saved to agent's skills directory |
+| `remove_skill` | skill names | Deletes the skill files from agent's skills directory |
 
 <details>
 <summary>Full parameter reference</summary>
