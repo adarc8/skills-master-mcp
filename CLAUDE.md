@@ -68,6 +68,8 @@ git push --tags
 
 The version bump creates a git tag automatically. Push it after publishing.
 
+**Authentication:** The `.npmrc` file contains the NPM authentication token that bypasses 2FA. This file is gitignored and should never be committed. The token is also stored in `.env` for reference.
+
 ## Key Implementation Details
 
 ### Agent Skill Paths
