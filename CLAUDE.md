@@ -74,18 +74,28 @@ The version bump creates a git tag automatically. Push it after publishing.
 
 ### Agent Skill Paths
 
-Skills install to different directories per agent:
-- **Claude Code**: `.claude/skills/` (project) or `~/.claude/skills/` (global)
+**Storage Architecture:**
+
+The `npx skills add` command uses a two-tier structure:
+1. **Actual skills** stored in `.agents/skills/` (source of truth)
+2. **Symlinks** created in `.claude/skills/` pointing to `.agents/skills/`
+
+This allows Claude Code to discover skills in `.claude/skills/` while keeping the actual files centralized in `.agents/skills/`.
+
+**Paths per agent:**
+- **Claude Code**:
+  - Storage: `.agents/skills/` (project) or `~/.agents/skills/` (global)
+  - Symlinks: `.claude/skills/` → `.agents/skills/`
 - **Cursor**: `.cursor/rules/` (project) or `~/.cursor/rules/` (global)
 
 **Installation Scope (REQUIRED):**
 Both `install_skill` and `remove_skill` tools now require the `global` parameter to be explicitly set:
-- `global: false` → Project-level: `./.claude/skills/` (only available in current project)
-- `global: true` → User-level: `~/.claude/skills/` (available across all projects)
+- `global: false` → Project-level: `./.agents/skills/` (only available in current project)
+- `global: true` → User-level: `~/.agents/skills/` (available across all projects)
 
 This forces Claude to prompt the user for their preference rather than defaulting to project-level installation.
 
-The `install_skill` tool delegates to `npx add-skill`, which handles installation. The `remove_skill` tool deletes files directly from these paths.
+The `install_skill` tool delegates to `npx skills add`, which handles installation. The `remove_skill` tool deletes skill directories directly from `.agents/skills/`.
 
 ### Backend URL Override
 

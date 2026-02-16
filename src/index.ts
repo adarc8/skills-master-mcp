@@ -392,13 +392,14 @@ Example: source="anthropics/claude-code", skills="frontend-design", agents="clau
 
 // Tool 5: remove_skill
 // Agent skill paths mapping
+// NOTE: npx skills add stores actual skills in .agents/skills/ and creates symlinks in .claude/skills/
 const AGENT_SKILL_PATHS: Record<
   string,
   { project: (cwd: string) => string; global: () => string }
 > = {
   "claude-code": {
-    project: (cwd: string) => join(cwd, ".claude", "skills"),
-    global: () => join(homedir(), ".claude", "skills"),
+    project: (cwd: string) => join(cwd, ".agents", "skills"),
+    global: () => join(homedir(), ".agents", "skills"),
   },
   cursor: {
     project: (cwd: string) => join(cwd, ".cursor", "rules"),
