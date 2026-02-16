@@ -192,10 +192,9 @@ export const InstallSkillInputSchema = z
       ),
     global: z
       .union([z.boolean(), z.string()])
-      .default(false)
       .transform((val) => val === true || val === "true")
       .describe(
-        "Install globally (user-level) instead of project-level (default: false)"
+        "Installation scope - REQUIRED. Set to true for user-level (~/.claude/skills) or false for project-level (./.claude/skills)"
       ),
   })
   .strict();
@@ -218,10 +217,9 @@ export const RemoveSkillInputSchema = z
       .describe("Agent whose skills to remove (default: 'claude-code')"),
     global: z
       .union([z.boolean(), z.string()])
-      .default(false)
       .transform((val) => val === true || val === "true")
       .describe(
-        "Remove from global (user-level) instead of project-level (default: false)"
+        "Removal scope - REQUIRED. Set to true for user-level (~/.claude/skills) or false for project-level (./.claude/skills)"
       ),
   })
   .strict();

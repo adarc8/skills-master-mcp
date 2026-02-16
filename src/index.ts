@@ -303,9 +303,11 @@ Parameters:
 - skills: Skill names, comma-separated (e.g., "frontend-design,backend-dev") [REQUIRED]
 - agents: Target agents, comma-separated [REQUIRED]
   Valid: claude-code, cursor, codex, opencode, antigravity, github-copilot, roo
-- global: Install user-level instead of project-level (default: false)
+- global: Installation scope [REQUIRED]
+  true = user-level install to ~/.claude/skills (available across all projects)
+  false = project-level install to ./.claude/skills (only this project)
 
-Example: source="anthropics/claude-code", skills="frontend-design", agents="claude-code"`,
+Example: source="anthropics/claude-code", skills="frontend-design", agents="claude-code", global=false`,
     inputSchema: InstallSkillInputSchema,
     annotations: {
       readOnlyHint: false,
@@ -414,7 +416,9 @@ Parameters:
 - skills: Skill names to remove (comma-separated: 'skill1,skill2'). REQUIRED.
 - agent: Agent to remove from (default: 'claude-code')
   Valid: claude-code, cursor, codex, opencode, antigravity, github-copilot, roo
-- global: Remove from global (user-level) instead of project-level (default: false)
+- global: Removal scope [REQUIRED]
+  true = remove from user-level ~/.claude/skills (global install)
+  false = remove from project-level ./.claude/skills (project install)
 
 Removes the skill's .md file from the agent's commands/rules directory.`,
     inputSchema: RemoveSkillInputSchema,
