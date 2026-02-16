@@ -20,15 +20,60 @@
 
 ## What is this?
 
-An [MCP](https://modelcontextprotocol.io) server that connects your AI coding agent to the [SkillsMP](https://skillsmp.com) marketplace — 8,000+ community-made skills.
+A *Plug & Play* [MCP](https://modelcontextprotocol.io) server that connects your AI coding agent to the [SkillsMP](https://skillsmp.com) marketplace - 8,000+ community-made skills.
 
-You can search for skills, read them directly into your agent's context, install them permanently, or remove them. No API key needed. One command to set up.
+You can search for skills, easily install them (to `~/.claude/skills/`) or read them directly into your agent's context (without installing).  
+**No API key needed.  
+One command to set up.**
 
-The key idea: you don't always need to _install_ a skill. You can just **read** it and your agent gets the instructions on the spot.
+The key idea is to help lazy people like me to use skills more often, and save time and tokens for our dear agents.
+
+---
+
+## Example
+
+Here's a real use case. You need to convert a markdown file to PDF but its waste of time and tokens for the agent to learn it with web search. 
+Instead, just import the skill:
+
+```
+You:      "I need to convert README.md to a PDF"
+
+Agent:    searches SkillsMP for "markdown to pdf"
+          → finds a skill for it
+          → reads the SKILL.md content from GitHub
+          → now has the full instructions in context
+
+Agent:    "I found a skill for this. It uses Puppeteer to render
+           the markdown and save it as PDF. Let me do that now."
+
+          ...converts your file using the skill's instructions.
+
+You:      ":))))"
+```
+
+The skill was never installed to your `~/.claude/skills`  
+The agent just read it, learned the approach, and executed it.  
+One-shot use.
+
+
+If you want a skill permanently, you can install it too:
+
+```
+You:      "Install that markdown-to-pdf skill for Claude Code"
+
+Agent:    runs install_skill
+          → skill is now saved to .claude/commands/
+          → available in every future conversation
+```
 
 ---
 
 ## Quick Start
+
+**No API key  
+No `.env`  
+No configuration  
+Just install and run**
 
 ### Claude Code
 
@@ -57,53 +102,28 @@ Add to `.cursor/mcp.json`:
 npx skills-master-mcp
 ```
 
-No API key. No `.env`. No configuration.
 
----
-
-## Example
-
-Here's a real use case. You need to convert a markdown file to PDF but your agent doesn't know how. Instead of figuring it out yourself, just ask:
-
-```
-You:      "I need to convert README.md to a PDF"
-
-Agent:    searches SkillsMP for "markdown to pdf"
-          → finds a skill for it
-          → reads the SKILL.md content from GitHub
-          → now has the full instructions in context
-
-Agent:    "I found a skill for this. It uses Puppeteer to render
-           the markdown and save it as PDF. Let me do that now."
-
-          ...converts your file using the skill's instructions.
-
-You:      "Thanks"
-```
-
-The skill was never installed to your machine. The agent just read it, learned the approach, and executed it. One-shot use.
-
-If you want a skill permanently, you can install it too:
-
-```
-You:      "Install that markdown-to-pdf skill for Claude Code"
-
-Agent:    runs install_skill
-          → skill is now saved to .claude/commands/
-          → available in every future conversation
-```
 
 ---
 
 ## Tools
 
-### `search`
+| Tool | Input | Output |
+|------|-------|--------|
+| `search` | keywords (e.g., `"react testing"`) | List of matching skills with name, author, stars, links |
+| `ai_search` | plain English (e.g., `"how to build REST APIs"`) | Semantically relevant skills ranked by relevance |
+| `read_skill` | GitHub owner + repo + path | The skill's full SKILL.md content, loaded into agent context |
+| `install_skill` | GitHub source + skill names + target agents | Skill permanently saved to agent's commands directory |
+| `remove_skill` | skill names | Deletes the skill files from agent's commands directory |
 
-Keyword search across the SkillsMP marketplace.
+<details>
+<summary>Full parameter reference</summary>
+
+### `search`
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `query` | string | *required* | Search terms (e.g., `"react testing"`) |
+| `query` | string | *required* | Search terms |
 | `page` | number | `1` | Page number |
 | `limit` | number | `20` | Results per page (max: 100) |
 | `sort_by` | string | `"stars"` | `"stars"` or `"recent"` |
@@ -111,27 +131,21 @@ Keyword search across the SkillsMP marketplace.
 
 ### `ai_search`
 
-Semantic search. Describe what you need in plain English and it finds relevant skills.
-
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `query` | string | *required* | Natural language query (e.g., `"tools for building REST APIs"`) |
+| `query` | string | *required* | Natural language query |
 | `response_format` | string | `"markdown"` | `"markdown"` or `"json"` |
 
 ### `read_skill`
 
-Fetches a skill's `SKILL.md` from GitHub and loads it into the agent's context. No installation needed — the agent can use it immediately.
-
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `owner` | string | *required* | GitHub user/org (e.g., `"anthropics"`) |
+| `owner` | string | *required* | GitHub user/org |
 | `repo` | string | *required* | Repository name |
 | `path` | string | — | Path to skill folder |
 | `branch` | string | `"main"` | Git branch |
 
 ### `install_skill`
-
-Permanently installs skills to your agent using [add-skill](https://www.npmjs.com/package/add-skill).
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
@@ -142,13 +156,13 @@ Permanently installs skills to your agent using [add-skill](https://www.npmjs.co
 
 ### `remove_skill`
 
-Deletes installed skill files from your agent's commands directory.
-
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `skills` | string | *required* | Skill names to remove (comma-separated) |
 | `agent` | string | `"claude-code"` | Target agent |
 | `global` | boolean | `false` | Remove from global scope |
+
+</details>
 
 ---
 
