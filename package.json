@@ -1,6 +1,6 @@
 {
   "name": "skills-master-mcp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "MCP server for SkillsMP - Search, discover, install and remove AI coding skills. Zero configuration required.",
   "type": "module",
   "main": "dist/index.js",
