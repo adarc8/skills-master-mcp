@@ -168,7 +168,7 @@ export const InstallSkillInputSchema = z
       .string()
       .min(1)
       .describe(
-        "GitHub shorthand 'owner/repo' (e.g., 'davila7/claude-code-templates'), full GitHub URL, or local path"
+        "Full path to skill: 'owner/repo/path/to/skill' (e.g., 'openclaw/skills/skills/araa47/md-2-pdf') or GitHub URL"
       ),
     skills: z
       .union([z.array(z.string()), z.string()])
