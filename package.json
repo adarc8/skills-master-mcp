@@ -1,0 +1,57 @@
+{
+  "name": "skills-master-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for SkillsMP - Search, discover, install and remove AI coding skills. Zero configuration required.",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "skills-master-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "skillsmp",
+    "skills-master",
+    "ai-skills",
+    "claude",
+    "cursor",
+    "codex",
+    "ai-assistant",
+    "developer-tools"
+  ],
+  "author": "Anilcan Cakir <anilcan.cakir@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adarc8/skills-master-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adarc8/skills-master-mcp/issues"
+  },
+  "homepage": "https://github.com/adarc8/skills-master-mcp#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "axios": "^1.7.9",
+    "express": "^4.21.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
